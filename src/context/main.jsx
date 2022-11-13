@@ -65,23 +65,25 @@ const reducer = (state, action) => {
 //   },
 // }
 
-const Store = (props) => {
+const StateContext = createContext(initialState);
+const DispatchContext = createContext()
+
+const AppProvider = (props) => {
   const {children} = props
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <Context.Provider value={state}>
-      <Context.Provider value={dispatch}>
+    <StateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>
         {children}
-      </Context.Provider>
-    </Context.Provider>
+      </DispatchContext.Provider>
+    </StateContext.Provider>
   );
 };
 
-const StateContext = createContext(initialState);
-const DispatchContext = createContext()
+
 
 export const useGlobalState = () => useContext(StateContext)
 export const useGlobalDispatch = () => useContext(DispatchContext)
 
-export default Store;
+export default AppProvider;

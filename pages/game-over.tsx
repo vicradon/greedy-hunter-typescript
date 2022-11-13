@@ -1,16 +1,11 @@
-import { useContext } from "react";
-import PrePostGameLayout from "../Layouts/PrePostGame";
-import { Context } from "../Store";
+import { useGlobalState } from "../src/context/main";
+import MainLayout from "../src/Layouts/Main";
 
 function GameEnd() {
-  const { globalState } = useContext(Context);
-  const {
-    eaten_food,
-    total_food,
-    elapsed_seconds,
-  } = globalState.previous_game_stats;
+  const { previous_game_stats } = useGlobalState();
+  const { eaten_food, total_food, elapsed_seconds } = previous_game_stats;
   return (
-    <PrePostGameLayout>
+    <MainLayout>
       <h1 className="font-size-3-rem text-danger mb-4">Game Over</h1>
       <p className="text-primary">
         Total Food:{" "}
@@ -21,7 +16,7 @@ function GameEnd() {
       <p className="text-primary">
         Time Spent: <span className="bold"> {elapsed_seconds} seconds</span>
       </p>
-    </PrePostGameLayout>
+    </MainLayout>
   );
 }
 
