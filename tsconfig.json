@@ -28,12 +28,12 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/context/main.jsx",
+    "src/context/main.tsx",
     "pages/game-over.tsx",
     "pages/game.jsx",
     "pages/game-won.tsx",
     ".next/types/**/*.ts"
-  ],
+, "pages/game/generateFoodItems.tsx"  ],
   "exclude": [
     "node_modules"
   ]

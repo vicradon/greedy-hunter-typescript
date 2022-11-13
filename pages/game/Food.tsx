@@ -1,4 +1,13 @@
-export default function Food({ width, coordinates }) {
+import useWindowSize from "../../src/hooks/useWindowSize";
+import { ICoordinates } from "./Player";
+
+function Food({
+  width,
+  coordinates,
+}: {
+  width: number;
+  coordinates: ICoordinates;
+}) {
   return (
     <img
       width={width < 50 ? width - 15 : width - 25}
@@ -15,3 +24,4 @@ export default function Food({ width, coordinates }) {
   );
 }
 
+export default Food;

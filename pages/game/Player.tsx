@@ -1,4 +1,12 @@
-export default function Player({ width, coordinates }) {
+import useWindowSize from "../../src/hooks/useWindowSize";
+
+function Player({
+  width,
+  coordinates,
+}: {
+  width: number;
+  coordinates: ICoordinates;
+}) {
   return (
     <div style={{ position: "absolute" }}>
       <img
@@ -15,3 +23,4 @@ export default function Player({ width, coordinates }) {
     </div>
   );
 }
+export default Player;
