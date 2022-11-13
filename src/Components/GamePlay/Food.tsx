@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ICoordinates } from "../../../pages/game";
 
 function Food({
@@ -7,9 +8,12 @@ function Food({
   width: number;
   coordinates: ICoordinates;
 }) {
+  const imgWidth = width < 50 ? width - 15 : width - 25;
+
   return (
-    <img
-      width={width < 50 ? width - 15 : width - 25}
+    <Image
+      width={imgWidth}
+      height={imgWidth}
       style={{
         position: "absolute",
         paddingTop: width < 50 ? ".5rem" : ".8rem",

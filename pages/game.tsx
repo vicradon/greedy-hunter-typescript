@@ -6,7 +6,7 @@ import Alert from "../src/Components/GamePlay/Alert";
 import ArrowKeyPad, {
   DPadDirections,
 } from "../src/Components/GamePlay/ArrowKeyPad";
-import styles from "./GamePlay.module.scss";
+import styles from "../src/Components/GamePlay/GamePlay.module.scss";
 import generateFoodItems from "../src/Components/GamePlay/generateFoodItems";
 import { useGlobalDispatch, useGlobalState } from "../src/context/main";
 import {

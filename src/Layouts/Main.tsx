@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useGlobalDispatch, useGlobalState } from "../context/main";
@@ -31,10 +32,12 @@ function MainLayout(props: MainLayoutProps) {
     <div className={styles.main}>
       <section className={styles.left_dot_grid}></section>
       <section className={styles.content}>
-        <img
+        <Image
           className={`mb-6 ${styles.game_character}`}
           src={"/assets/icons/character.svg"}
           alt="Game Character"
+          width={200}
+          height={200}
         />
 
         <div className="mb-6">{children}</div>
