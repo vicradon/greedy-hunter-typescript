@@ -1,5 +1,4 @@
-import useWindowSize from "../../src/hooks/useWindowSize";
-import { ICoordinates } from "./Player";
+import { ICoordinates } from "../../../pages/game";
 
 function Food({
   width,

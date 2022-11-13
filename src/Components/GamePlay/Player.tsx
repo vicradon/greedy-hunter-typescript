@@ -1,4 +1,4 @@
-import useWindowSize from "../../src/hooks/useWindowSize";
+import { ICoordinates } from "../../../pages/game";
 
 function Player({
   width,

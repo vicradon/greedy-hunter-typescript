@@ -1,13 +1,19 @@
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useState } from "react";
-import Player from "./Player";
-import useWindowSize from "../../src/hooks/useWindowSize";
-import Alert from "./Alert";
-import ArrowKeyPad from "./ArrowKeyPad";
-import formatSecondsToTimeString from "./formatSecondsToTimeString";
+import Player from "../src/Components/GamePlay/Player";
+import useWindowSize from "../src/hooks/useWindowSize";
+import Alert from "../src/Components/GamePlay/Alert";
+import ArrowKeyPad, {
+  DPadDirections,
+} from "../src/Components/GamePlay/ArrowKeyPad";
 import styles from "./GamePlay.module.scss";
-import generateFoodItems from "./generateFoodItems";
-import { useGlobalDispatch, useGlobalState } from "../../src/context/main";
+import generateFoodItems from "../src/Components/GamePlay/generateFoodItems";
+import { useGlobalDispatch, useGlobalState } from "../src/context/main";
+import {
+  generateGridArray,
+  getNextCoordinates,
+  formatSecondsToTimeString,
+} from "../src/Components/GamePlay/utils";
 
 export interface ICoordinates {
   x: number;
@@ -29,8 +35,8 @@ function GamePlay() {
   const [totalMoves, setTotalMoves] = useState(0);
   const isMobileBrowser = width <= 800 && height <= 600;
 
-  const grid = grid_side;
-  const maxMoves = Math.ceil(grid * grid * 0.2);
+  const gridSize = grid_side;
+  const maxMoves = Math.ceil(gridSize * gridSize * 0.2);
 
   const smallScales: { [key: string]: number } = {
     5: 11,
@@ -54,63 +60,41 @@ function GamePlay() {
     12: 3,
   };
 
-  const SCALE = width > 576 ? normalScales[grid] : smallScales[grid];
-  const squareUnit = grid * SCALE;
-  const gridEdge = grid * grid * SCALE;
+  const SCALE = width > 576 ? normalScales[gridSize] : smallScales[gridSize];
+  const squareUnit = gridSize * SCALE;
+  const gridEdge = gridSize * gridSize * SCALE;
   const router = useRouter();
 
   const handleEndGame = () => {
     dispatch({
       type: "END_GAME",
       payload: {
-        eaten_food: grid - foodItems.length,
-        total_food: grid,
+        eaten_food: gridSize - foodItems.length,
+        total_food: gridSize,
         elapsed_seconds: elapsedSeconds,
       },
     });
   };
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = (prop: KeyboardEvent | DPadDirections) => {
     if (totalMoves === maxMoves) {
       handleEndGame();
-
       router.replace("/game-over");
     }
-    let tempCoordinates = { ...coordinates };
 
-    // left
-    if (
-      (event.code === "ArrowLeft" || event.code === "KeyA") &&
-      coordinates.x - squareUnit >= 0
-    ) {
-      tempCoordinates = { ...coordinates, x: coordinates.x - squareUnit };
+    const eventCode = prop instanceof KeyboardEvent ? prop.code : prop;
+
+    const newCoordinates = getNextCoordinates(
+      eventCode,
+      coordinates,
+      squareUnit,
+      gridEdge
+    );
+
+    if (JSON.stringify(coordinates) !== JSON.stringify(newCoordinates)) {
       setTotalMoves(totalMoves + 1);
     }
-    // top
-    if (
-      (event.code === "ArrowUp" || event.code === "KeyW") &&
-      coordinates.y - squareUnit >= 0
-    ) {
-      tempCoordinates = { ...coordinates, y: coordinates.y - squareUnit };
-      setTotalMoves(totalMoves + 1);
-    }
-    // right
-    if (
-      (event.code === "ArrowRight" || event.code === "KeyD") &&
-      coordinates.x + squareUnit < gridEdge
-    ) {
-      tempCoordinates = { ...coordinates, x: coordinates.x + squareUnit };
-      setTotalMoves(totalMoves + 1);
-    }
-    // bottom
-    if (
-      (event.code === "ArrowDown" || event.code === "KeyS") &&
-      coordinates.y + squareUnit < gridEdge
-    ) {
-      tempCoordinates = { ...coordinates, y: coordinates.y + squareUnit };
-      setTotalMoves(totalMoves + 1);
-    }
-    handleFoodIntake(tempCoordinates);
-    setCoordinates(tempCoordinates);
+    handleFoodIntake(newCoordinates);
+    setCoordinates(newCoordinates);
   };
 
   const handleFoodIntake = (coordinates: ICoordinates) => {
@@ -125,7 +109,7 @@ function GamePlay() {
         gridArray: newGridArray,
         SCALE,
         squareUnit,
-        grid,
+        grid: gridSize,
       });
       if (!foodItems.length) {
         handleEndGame();
@@ -151,45 +135,26 @@ function GamePlay() {
   });
 
   useEffect(() => {
-    const generateGridArray = () => {
-      const gridArray = Array(grid)
-        .fill(0)
-        .map((_) => Array(grid).fill(0));
+    const gridArray = generateGridArray(gridSize);
+    const foodItems = generateFoodItems({
+      gridArray,
+      SCALE,
+      squareUnit,
+      grid: gridSize,
+    });
 
-      const randomIndex1 = Math.floor(Math.random() * grid);
-      const randomIndex2 = Math.floor(Math.random() * grid);
+    const randomIndex1 = Math.floor(Math.random() * gridSize);
+    const randomIndex2 = Math.floor(Math.random() * gridSize);
 
-      gridArray[randomIndex1][randomIndex2] = "player";
-      setCoordinates({
-        x: randomIndex1 * squareUnit,
-        y: randomIndex2 * squareUnit,
-      });
-
-      Array(grid)
-        .fill("x")
-        .forEach((foodItem) => {
-          let randomIndex1 = Math.floor(Math.random() * grid);
-          let randomIndex2 = Math.floor(Math.random() * grid);
-
-          while (
-            gridArray[randomIndex1][randomIndex2] === foodItem ||
-            gridArray[randomIndex1][randomIndex2] === "player"
-          ) {
-            randomIndex1 = Math.floor(Math.random() * grid);
-            randomIndex2 = Math.floor(Math.random() * grid);
-          }
-          gridArray[randomIndex1][randomIndex2] = foodItem;
-        });
-
-      return gridArray;
-    };
-
-    const gridArray = generateGridArray();
-    const foodItems = generateFoodItems({ gridArray, SCALE, squareUnit, grid });
+    gridArray[randomIndex1][randomIndex2] = "player";
+    setCoordinates({
+      x: randomIndex1 * squareUnit,
+      y: randomIndex2 * squareUnit,
+    });
 
     setFoodItems(foodItems);
     setGridArray(gridArray);
-  }, [grid, squareUnit, SCALE]);
+  }, [gridSize, squareUnit, SCALE]);
 
   useEffect(() => {
     const movement_instruction_displayed = JSON.parse(
@@ -203,12 +168,9 @@ function GamePlay() {
 
     if (!isMobileBrowser && !movement_instruction_displayed) {
       setAlert({ display: true, content: "Use WASD or Arrow Keys to move" });
-
       localStorage.setItem("movement_instruction_displayed", String(true));
     }
   }, [isMobileBrowser]);
-
-  const handleSetAlert = () => {};
 
   return (
     <div className={styles.main}>
@@ -220,7 +182,7 @@ function GamePlay() {
           <p>
             Grid:
             <span className="bold ml-2">
-              {grid} x {grid}
+              {gridSize} x {gridSize}
             </span>
           </p>
           <p>
@@ -232,19 +194,19 @@ function GamePlay() {
         </div>
         <div
           style={{
-            width: `${grid * grid * SCALE + 2}px`,
+            width: `${gridSize * gridSize * SCALE + 2}px`,
           }}
           className={styles.game_board_wrapper}
         >
           <div
             style={{
-              backgroundSize: `${grid * SCALE}px ${grid * SCALE}px`,
-              height: `${grid * grid * SCALE + 2}px`,
+              backgroundSize: `${gridSize * SCALE}px ${gridSize * SCALE}px`,
+              height: `${gridSize * gridSize * SCALE + 2}px`,
             }}
             className={styles.game_board}
           >
             <>
-              <Player coordinates={coordinates} width={grid * SCALE} />
+              <Player coordinates={coordinates} width={gridSize * SCALE} />
               {foodItems}
             </>
           </div>
@@ -260,7 +222,7 @@ function GamePlay() {
           </p>
         </div>
       </div>
-      {/* {isMobileBrowser && <ArrowKeyPad handleKeyDown={handleKeyDown} />} */}
+      {isMobileBrowser && <ArrowKeyPad handleDPad={handleKeyDown} />}
       {alert.display && <Alert content={alert.content} setAlert={setAlert} />}
     </div>
   );
