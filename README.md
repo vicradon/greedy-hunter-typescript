@@ -2,7 +2,7 @@
 
 A game where one has to eat all food items before they run out of moves
 
-![Game Play Snaphsot](./src/Assets/images/game-play-snapshot.png)
+![Game Play Snaphsot](https://github.com/vicradon/greedy_hunter/blob/main/src/Assets/images/game-play-snapshot.png)
 
 ## How To Play?
 
