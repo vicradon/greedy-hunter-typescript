@@ -1,34 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Greedy Hunter
+
+A game where one has to eat all food items before they run out of moves
+
+![Game Play Snaphsot](./src/Assets/images/game-play-snapshot.png)
+
+## How To Play?
+
+- Using the WASD or Arrow keys to move the player around
+- Consume food items closests to you
+- Ensure you don't run out of moves before cosuming all food items
+
+## Prerequisites
+
+- A local installation of Node.js, v12 or higher
 
 ## Getting Started
 
-First, run the development server:
+The game was created using Create React App. To get started, clone this repo
 
-```bash
-npm run dev
-# or
-yarn dev
+```
+git clone https://github.com/vicradon/greedy_hunter.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Change directory into the repo and install dependencies
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```
+cd greedy_hunter;
+npm i
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Run the local dev server using
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
+npm start
+```
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Feel free to make a PR if any bug is encountered
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## LICENCE
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+[MIT](/LICENCE)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This repo is licenced under the MIT Licence.
+Copyright &copy; 2021, Osinachi Chukwujama
