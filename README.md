@@ -19,13 +19,13 @@ A game where one has to eat all food items before they run out of moves
 The game was created using Create React App. To get started, clone this repo
 
 ```
-git clone https://github.com/vicradon/greedy_hunter.git
+git clone https://github.com/vicradon/greedy-hunter-typescript.git
 ```
 
 Change directory into the repo and install dependencies
 
 ```
-cd greedy_hunter;
+cd greedy-hunter-typescript;
 npm i
 ```
 
